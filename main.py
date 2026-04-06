@@ -29,10 +29,10 @@ ACTION_DIM_CONFIG = 4
 # Screenshot selalu mengikuti active window saat ini.
 TARGET_WINDOW_CLASS = ""
 # Proporsi crop untuk ambil panel simulator di tengah Roblox Studio.
-SIMULATOR_CROP_LEFT_RATIO = 0.19
-SIMULATOR_CROP_TOP_RATIO = 0.18
-SIMULATOR_CROP_RIGHT_RATIO = 0.12
-SIMULATOR_CROP_BOTTOM_RATIO = 0.12
+SIMULATOR_CROP_LEFT_RATIO = 0.1
+SIMULATOR_CROP_TOP_RATIO = 0.25
+SIMULATOR_CROP_RIGHT_RATIO = 0.01
+SIMULATOR_CROP_BOTTOM_RATIO = 0.2
 
 # --- STATE GLOBAL ---
 current_episode_id = 1
@@ -171,19 +171,13 @@ def crop_simulator_center(source_path: str, target_path: str):
 
         crop_width = base_right - base_left
         crop_height = base_bottom - base_top
-        target_aspect = 16 / 9
-
-        if crop_width / crop_height >= target_aspect:
-            final_height = crop_height
-            final_width = int(final_height * target_aspect)
-        else:
-            final_width = crop_width
-            final_height = int(final_width / target_aspect)
-
-        left = base_left + (crop_width - final_width) // 2
-        top = base_top + (crop_height - final_height) // 2
-        right = left + final_width
-        bottom = top + final_height
+            # Gunakan width sebagai ukuran square, height sesuaikan ke width
+        square_size = crop_width
+        
+        left = base_left + (crop_width - square_size) // 2
+        top = base_top + (crop_height - square_size) // 2
+        right = left + square_size
+        bottom = top + square_size
 
         cropped = image.crop((left, top, right, bottom))
         cropped.save(target_path)
